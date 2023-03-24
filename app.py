@@ -1,7 +1,8 @@
-# app.py
-from flask import Flask, request, render_template_string
+from flask import Flask, render_template, request, Markup
 import pandas as pd
-from team_scraper import TeamScraper  # Assuming you have saved the TeamScraper class in a file named team_scraper.py
+from team_scraper import TeamScraper
+import plotly.express as px
+import plotly.io as pio
 
 app = Flask(__name__)
 
@@ -12,7 +13,24 @@ def index():
         scraper = TeamScraper(team_id)
         team_df = scraper.scrape_team_data()
         team_df = scraper.convert_season_value_to_number(team_df)
-        return team_df.to_html()
+
+        # Convert relevant columns to numeric types
+        team_df['ROUNDS PLAYED'] = pd.to_numeric(team_df['ROUNDS PLAYED'])
+        team_df['ROUNDS WIN'] = pd.to_numeric(team_df['ROUNDS WIN'])
+        
+        rounds_played = team_df.groupby('MAP')['ROUNDS PLAYED'].sum()
+        rounds_won = team_df.groupby('MAP')['ROUNDS WIN'].sum()
+
+        win_percentages = (rounds_won / rounds_played) * 100
+        win_percentages = win_percentages.sort_values(ascending=False)
+
+        fig = px.bar(win_percentages, x=win_percentages.index, y=win_percentages.values, text=win_percentages.values, title='Win Percentages by Map')
+        fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+        fig.update_layout(xaxis_title='Map', yaxis_title='Win Percentage', yaxis_tickformat='%')
+
+        plot_html = pio.to_html(fig, full_html=False)
+
+        return Markup(f'{team_df.to_html()}<br>{plot_html}')
     return '''
     <form method="post">
         Team ID: <input type="text" name="team_id"><br>
