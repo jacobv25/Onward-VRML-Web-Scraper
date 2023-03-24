@@ -24,7 +24,7 @@ This script contains the WebScraper class, which allows you to scrape team IDs f
 ```
 from web_scraper import WebScraper
 
-url = "https://vrmasterleague.com/Onward/Teams/"
+url = "https://vrmasterleague.com/Onward/Teams/[random string of characters]"
 web_scraper = WebScraper(url)
 web_scraper.scrape()
 team_ids = web_scraper.hrefs
