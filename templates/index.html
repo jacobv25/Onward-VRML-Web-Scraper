@@ -1,18 +1,17 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Team Stats</title>
-  </head>
-  <body>
-    <form method="post">
-      <label for="team_id">Team ID:</label>
-      <input type="text" name="team_id" id="team_id"><br>
-      <button type="submit">Submit</button>
-    </form>
-    {% if plot %}
-      <h2>Win Percentages by Map</h2>
-      {{ plot|safe }}
-    {% endif %}
-  </body>
+<head>
+  <title>Team Scraper</title>
+</head>
+<body>
+  <h1>Team Scraper</h1>
+  <form method="post">
+    Team ID: <input type="text" name="team_id"><br>
+    <input type="submit" value="Submit">
+  </form>
+  {% if team_df %}
+  {{ team_df|safe }}<br>
+  {{ plot_html|safe }}
+  {% endif %}
+</body>
 </html>

@@ -30,13 +30,8 @@ def index():
 
         plot_html = pio.to_html(fig, full_html=False)
 
-        return Markup(f'{team_df.to_html()}<br>{plot_html}')
-    return '''
-    <form method="post">
-        Team ID: <input type="text" name="team_id"><br>
-        <input type="submit" value="Submit">
-    </form>
-    '''
+        return render_template('index.html', team_df=team_df.to_html(), plot_html=plot_html)
+    return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
