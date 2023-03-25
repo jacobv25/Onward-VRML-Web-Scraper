@@ -40,5 +40,9 @@ def index():
         return render_template('index.html', team_df=analyzer.team_df.to_html(), plot_html_bar=plot_html_bar, plot_html_scatter=plot_html_scatter, stacked_bar=stacked_bar_html)
     return render_template('index.html')
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 if __name__ == "__main__":
     app.run(debug=True)
