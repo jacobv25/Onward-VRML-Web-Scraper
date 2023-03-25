@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from team_analyzer import TeamAnalyzer
 import plotly.express as px
+import plotly.graph_objs as go
 
 app = Flask(__name__)
 
@@ -28,7 +29,15 @@ def index():
         plot_html_bar = fig_bar.to_html(full_html=False)
         plot_html_scatter = fig_scatter.to_html(full_html=False)
 
-        return render_template('index.html', team_df=analyzer.team_df.to_html(), plot_html_bar=plot_html_bar, plot_html_scatter=plot_html_scatter)
+        # Create a stacked bar chart of the rounds played and won on each map using Plotly
+        fig_stacked = go.Figure(data=[
+            go.Bar(name='Rounds Played', x=rounds_played.index, y=rounds_played.values),
+            go.Bar(name='Rounds Won', x=rounds_won.index, y=rounds_won.values, marker_color='green')
+        ])
+        fig_stacked.update_layout(title='Rounds Played and Won by Map', xaxis_title='Map', yaxis_title='Number of Rounds')
+        stacked_bar_html = fig_stacked.to_html(full_html=False)
+
+        return render_template('index.html', team_df=analyzer.team_df.to_html(), plot_html_bar=plot_html_bar, plot_html_scatter=plot_html_scatter, stacked_bar=stacked_bar_html)
     return render_template('index.html')
 
 if __name__ == "__main__":

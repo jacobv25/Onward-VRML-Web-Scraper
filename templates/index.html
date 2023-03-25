@@ -14,6 +14,9 @@
   {{ team_df|safe }}<br>
   {{ plot_html_bar|safe }}<br>
   {{ plot_html_scatter|safe }}
+  {% if stacked_bar %}
+    {{ stacked_bar|safe }}
+  {% endif %}
   {% endif %}
 </body>
 </html>
